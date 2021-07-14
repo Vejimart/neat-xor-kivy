@@ -1,0 +1,130 @@
+#:kivy 1.0.9
+
+<NodeWidget>:
+    canvas:
+        Color:
+            rgba: root.color[0], root.color[1], root.color[2], root.color[3]
+        Ellipse:
+            size: (min(self.width, self.height), min(self.width, self.height))
+            pos: ((self.width / 2) - (min(self.width, self.height)/2), (self.height / 2) - (min(self.width, self.height)/2))
+    Label:
+        text: root.txt
+        color: 1, 1, 1, 0.8
+        y: root.height/2
+
+<ConnWidget>:
+    canvas:
+        Color:
+            rgba: 1, 1, 1, 0.5
+        Line:
+            points: root.start_x, root.start_y, root.inter_x, root.inter_y
+            width: 3
+        Color:
+            rgba: 1, 1, 0, 0.2
+        Line:
+            points: root.inter_x, root.inter_y, root.end_x, root.end_y
+            width: 1.2
+
+<XorAppLayout>:
+    orientation: 'horizontal'
+
+    textMonitor: text_monitor
+    networkMonitor: network_monitor
+    evolutionMonitor: evolution_monitor
+    genIndexInput: gen_index_input
+
+    BoxLayout:
+        size_hint_x: 0.3
+        orientation: 'vertical'
+        NetworkMonitor:
+            size_hint_y: 0.4
+            multiline: True
+            readonly: True
+            id: network_monitor
+            canvas:
+                Color:
+                    rgba: 0.5, 0.5, 0.5, 1
+                Line:
+                    rectangle: 2, 2, self.width-2, self.height-2
+                    width: 2
+        EvolutionMonitor:
+            id: evolution_monitor
+            bar_width: self.height * 0.05
+            scroll_type: ['bars', 'content']
+            effect_cls: 'ScrollEffect'
+            canvas:
+                Color:
+                    rgba: 0.5, 0.5, 0.5, 1
+                Line:
+                    rectangle: 2, 2, self.width-2, self.height-2
+                    width: 2
+    TextInput:
+        size_hint_x: 0.5
+        multiline: True
+        readonly: True
+        id: text_monitor
+    BoxLayout:
+        size_hint_x: 0.2
+        orientation: 'vertical'
+        GridLayout:
+            size_hint_y: 0.3
+            cols: 2
+            rows: 3
+            Button:
+                size_hint_x: 0.5
+                text: 'Previous'
+                on_press: root.set_gen_index(new_index=root.gen_index - 1)
+            Button:
+                size_hint_x: 0.5
+                text: 'Next'
+                on_press: root.set_gen_index(new_index=root.gen_index + 1)
+            Button:
+                size_hint_x: 0.5
+                text: 'First'
+                on_press: root.set_gen_index(new_index=0)
+            Button:
+                size_hint_x: 0.5
+                text: 'Last'
+                on_press: root.set_gen_index(new_index=len(root.generations) - 1)
+            Button:
+                size_hint_x: 0.5
+                text: 'Go to:'
+                on_press: root.set_gen_index(new_index=int(root.genIndexInput.text)-1)
+            TextInput:
+                size_hint_x: 0.5
+                id: gen_index_input
+                halign: 'center'
+                multiline: False
+                input_filter: 'int'
+                text: '1'
+        Button:
+            size_hint_y: 0.6
+        GridLayout:
+            size_hint_y: 0.3
+            cols: 2
+            rows: 3
+            Button:
+                size_hint_x: 0.5
+                text: 'Start'
+                disabled: True
+            Button:
+                size_hint_x: 0.5
+                text: 'Pause'
+                disabled: True
+            Button:
+                size_hint_x: 0.5
+                text: 'Save'
+                disabled: True
+            Button:
+                size_hint_x: 0.5
+                text: 'Load'
+                disabled: True
+            Button:
+                size_hint_x: 0.5
+                text: 'Reset'
+                on_press: root.reset_evolution()
+            Button:
+                size_hint_x: 0.5
+                text: 'Get\ngenome'
+                halign: 'center'
+                disabled: True
